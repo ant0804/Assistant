@@ -18,15 +18,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
-import android.widget.Toast;
 
 
 import com.google.gson.Gson;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.w3c.dom.Text;
+import com.venus.assistant.Weather.Entities.WeatherInfo;
 
 import java.io.IOException;
 import java.io.InputStream;
