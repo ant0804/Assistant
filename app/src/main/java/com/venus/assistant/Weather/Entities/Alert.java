@@ -1,4 +1,4 @@
-package com.venus.assistant;
+package com.venus.assistant.Weather.Entities;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
