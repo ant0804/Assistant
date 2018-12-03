@@ -21,6 +21,7 @@ import android.view.MenuItem;
 
 
 import com.google.gson.Gson;
+import com.venus.assistant.Utilise.Datetime;
 import com.venus.assistant.Weather.Entities.WeatherInfo;
 
 import java.io.IOException;
@@ -29,18 +30,24 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Date;
+
+import static com.venus.assistant.Utilise.HttpUtil.sendOkHttpRequest;
+import static com.venus.assistant.Utilise.Utility.handleProvinceResponse;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     final private int REQUEST_INTERNET = 123;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -52,10 +59,10 @@ public class MainActivity extends AppCompatActivity
         });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        //ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-        //         this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        //drawer.addDrawerListener(toggle);
-        //toggle.syncState();
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -67,7 +74,10 @@ public class MainActivity extends AppCompatActivity
                     new String[]{Manifest.permission.INTERNET},
                     REQUEST_INTERNET);
         } else{
-            new DownloadTextTask().execute("http://tq.360.cn/api/weatherquery/querys?app=tq360&code=101190201&t=1543033769350&c=1543134959551&_jsonp=renderData&_=1543033769352");
+            //new DownloadTextTask().execute("http://tq.360.cn/api/weatherquery/querys?app=tq360&code=101190201&t=1543033769350&c=1543134959551&_jsonp=renderData&_=1543033769352");
+
+            //sendOkHttpRequest(String.format(getProvinceUrl, Datetime.getTimeStamp()),new );
+
         }
 
     }
@@ -209,4 +219,6 @@ public class MainActivity extends AppCompatActivity
             //Toast.makeText(getBaseContext(), result, Toast.LENGTH_LONG).show();
         }
     }
+
+
 }
