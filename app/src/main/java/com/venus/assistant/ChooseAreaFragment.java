@@ -22,16 +22,11 @@ import com.venus.assistant.Weather.Entities.Province;
 
 
 import org.litepal.LitePal;
-import org.litepal.LitePalApplication;
-import org.litepal.LitePalDB;
-import org.litepal.crud.LitePalSupport;
+
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-
-import javax.security.auth.callback.Callback;
 
 import okhttp3.Call;
 import okhttp3.Response;
@@ -43,9 +38,9 @@ import static com.venus.assistant.Utilise.Utility.handleProvinceResponse;
 
 public class ChooseAreaFragment extends Fragment {
 
-    final private String getProvinceUrl="http://cdn.weather.hao.360.cn/sed_api_area_query.php?grade=province&_jsonp=getData&_=%x";
-    final private String getCityUrl="http://cdn.weather.hao.360.cn/sed_api_area_query.php?grade=city&_jsonp=getData&code=%s&_=%x";
-    final private String getTownUrl="http://cdn.weather.hao.360.cn/sed_api_area_query.php?grade=town&_jsonp=getData&code=%s%s&_=%x";
+    final private String getProvinceUrl = "http://cdn.weather.hao.360.cn/sed_api_area_query.php?grade=province&_jsonp=getData&_=%s";
+    final private String getCityUrl = "http://cdn.weather.hao.360.cn/sed_api_area_query.php?grade=city&_jsonp=getData&code=%s&_=%s";
+    final private String getTownUrl = "http://cdn.weather.hao.360.cn/sed_api_area_query.php?grade=town&_jsonp=getData&code=%s&_=%s";
 
     public static final int LEVEL_PROVINCE =0;
     public static final int LEVEL_CITY=1;
@@ -54,6 +49,7 @@ public class ChooseAreaFragment extends Fragment {
     private ProgressDialog progressDialog;
     private TextView titleText;
     private Button backButton;
+    private Button backHomeButton;
     private ListView listView;
     private ArrayAdapter<String> adapter;
     private List<String> dataList=new ArrayList<>();
@@ -73,6 +69,7 @@ public class ChooseAreaFragment extends Fragment {
         View view=inflater.inflate(R.layout.choose_area,container,false);
         titleText=(TextView)view.findViewById(R.id.title_text);
         backButton=(Button)view.findViewById(R.id.back_button);
+        backHomeButton = (Button) view.findViewById(R.id.back_home_button);
         listView=(ListView)view.findViewById(R.id.list_view);
         adapter=new ArrayAdapter<>(getContext(),android.R.layout.simple_list_item_1,dataList);
         listView.setAdapter(adapter);
@@ -82,9 +79,9 @@ public class ChooseAreaFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        listView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(currentLevel==LEVEL_PROVINCE){
                     selectedProvince=provinceList.get(position);
                     queryCities();
@@ -92,11 +89,6 @@ public class ChooseAreaFragment extends Fragment {
                     selectedCity=cityList.get(position);
                     queryCounties();
                 }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
         backButton.setOnClickListener(new View.OnClickListener(){
@@ -110,32 +102,39 @@ public class ChooseAreaFragment extends Fragment {
                 }
             }
         });
+        backHomeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().finish();
+            }
+        });
         queryProvinces();
     }
 
     private void queryProvinces() {
         titleText.setText("中国");
         backButton.setVisibility(View.GONE);
-        //provinceList=LitePal.findAll(Province.class);
-//        if(provinceList.size()>0){
-//            dataList.clear();
-//            for(Province province:provinceList){
-//                dataList.add(province.getProvinceName());
-//            }
-//            adapter.notifyDataSetChanged();
-//            listView.setSelection(0);
-//            currentLevel=LEVEL_PROVINCE;
-//        }else{
-//            String address=String.format(getProvinceUrl, Datetime.getTimeStamp());
-//            queryFromServer(address,"province");
-//        }
-        String address=String.format(getProvinceUrl, Datetime.getTimeStamp());
-        queryFromServer(address,"province");
+        backHomeButton.setVisibility(View.VISIBLE);
+        provinceList = LitePal.findAll(Province.class);
+        if (provinceList.size() > 0) {
+            dataList.clear();
+            for (Province province : provinceList) {
+                dataList.add(province.getProvinceName());
+            }
+            adapter.notifyDataSetChanged();
+            listView.setSelection(0);
+            currentLevel = LEVEL_PROVINCE;
+        } else {
+            //String address=String.format(getProvinceUrl, Datetime.getTimeStamp());
+            String address = String.format(getProvinceUrl, String.valueOf(Datetime.getTimeStamp()));
+            queryFromServer(address, "province");
+        }
     }
 
     private void queryCities() {
         titleText.setText(selectedProvince.getProvinceName());
         backButton.setVisibility(View.VISIBLE);
+        backHomeButton.setVisibility(View.GONE);
         cityList=LitePal.where("provinceid=?",String.valueOf(selectedProvince.getId())).find(City.class);
         if(cityList.size()>0){
             dataList.clear();
@@ -146,8 +145,10 @@ public class ChooseAreaFragment extends Fragment {
             listView.setSelection(0);
             currentLevel=LEVEL_CITY;
         }else{
-            int provinceCode=selectedProvince.getProvinceCode();
-            String address=String.format(getCityUrl,String.valueOf(provinceCode), Datetime.getTimeStamp());
+            String provinceCode = selectedProvince.getProvinceCode();
+            //String address=String.format(getCityUrl,String.valueOf(provinceCode), Datetime.getTimeStamp());
+            String address = String.format(getCityUrl, provinceCode, String.valueOf(Datetime.getTimeStamp()));
+
             queryFromServer(address,"city");
         }
     }
@@ -155,6 +156,7 @@ public class ChooseAreaFragment extends Fragment {
     private void queryCounties() {
         titleText.setText(selectedCity.getCityName());
         backButton.setVisibility(View.VISIBLE);
+        backHomeButton.setVisibility(View.GONE);
         countyList=LitePal.where("cityid=?",String.valueOf(selectedCity.getId())).find(County.class);
         if(countyList.size()>0){
             dataList.clear();
@@ -165,18 +167,21 @@ public class ChooseAreaFragment extends Fragment {
             listView.setSelection(0);
             currentLevel=LEVEL_COUNTY;
         }else{
-            int provinceCode=selectedProvince.getProvinceCode();
-            int cityCode=selectedCity.getCityCode();
-            String address=String.format(getTownUrl,String.valueOf(provinceCode),String.valueOf(cityCode), Datetime.getTimeStamp());
-            queryFromServer(address,"city");
+            //int provinceCode=selectedProvince.getProvinceCode();
+            String cityCode = selectedCity.getCityCode();
+            //String address=String.format(getTownUrl,String.valueOf(provinceCode),String.valueOf(cityCode), Datetime.getTimeStamp());
+
+            String address = String.format(getTownUrl, cityCode, String.valueOf(Datetime.getTimeStamp()));
+            queryFromServer(address, "county");
         }
     }
 
     private void queryFromServer(String address,final String type) {
         showProcessDialog();
+        //long timestamp=Datetime.getTimeStamp();
         sendOkHttpRequest(address,new okhttp3.Callback(){
             @Override
-            public void onResponse(Call cll, Response response)throws IOException{
+            public void onResponse(Call call, Response response) throws IOException {
                 String resopnseText=response.body().string().replace("getData","").trim();
                 resopnseText=resopnseText.substring(1,resopnseText.length()-2);
                 //resopnseText=resopnseText.substring(0,resopnseText.length()-2);
@@ -185,9 +190,9 @@ public class ChooseAreaFragment extends Fragment {
                 if("province".equals(type)){
                     result=handleProvinceResponse(resopnseText);
                 }else if("city".equals(type)){
-                    result=handleCityResponse(resopnseText,selectedProvince.getId());
+                    result = handleCityResponse(resopnseText, selectedProvince.getId() + "");
                 }else if("county".equals(type)){
-                    result=handleCountyResponse(resopnseText,selectedCity.getId());
+                    result = handleCountyResponse(resopnseText, selectedCity.getId() + "");
                 }
 
                 if(result){

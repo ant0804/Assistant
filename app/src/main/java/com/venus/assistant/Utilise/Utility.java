@@ -2,6 +2,7 @@ package com.venus.assistant.Utilise;
 
 import android.text.TextUtils;
 
+import com.google.gson.JsonArray;
 import com.venus.assistant.Weather.Entities.City;
 import com.venus.assistant.Weather.Entities.County;
 import com.venus.assistant.Weather.Entities.Province;
@@ -17,10 +18,10 @@ public class Utility {
             try {
                 JSONArray allProvince = new JSONArray(response);
                 for (int i = 0; i < allProvince.length(); i++) {
-                    JSONObject provinceObject = allProvince.getJSONObject(i);
+                    JSONArray provinceObject = allProvince.getJSONArray(i);
                     Province province = new Province();
-                    province.setProvinceCode(provinceObject.getInt("1"));
-                    province.setProvinceName(provinceObject.getString("0"));
+                    province.setProvinceCode(provinceObject.getString(1));
+                    province.setProvinceName(provinceObject.getString(0));
                     province.save();
                 }
                 return true;
@@ -32,15 +33,15 @@ public class Utility {
         return false;
     }
 
-    public static boolean handleCityResponse(String response, int provinceId) {
+    public static boolean handleCityResponse(String response, String provinceId) {
         if (!TextUtils.isEmpty(response)) {
             try {
                 JSONArray allCity = new JSONArray(response);
                 for (int i = 0; i < allCity.length(); i++) {
-                    JSONObject cityObject = allCity.getJSONObject(i);
+                    JSONArray cityObject = allCity.getJSONArray(i);
                     City city = new City();
-                    city.setCityCode(cityObject.getInt("1"));
-                    city.setCityName(cityObject.getString("0"));
+                    city.setCityCode(cityObject.getString(1));
+                    city.setCityName(cityObject.getString(0));
                     city.setProvinceId(provinceId);
                     city.save();
                 }
@@ -53,15 +54,15 @@ public class Utility {
         return false;
     }
 
-    public static boolean handleCountyResponse(String response, int cityId) {
+    public static boolean handleCountyResponse(String response, String cityId) {
         if (!TextUtils.isEmpty(response)) {
             try {
                 JSONArray allCounty = new JSONArray(response);
                 for (int i = 0; i < allCounty.length(); i++) {
-                    JSONObject countyObject = allCounty.getJSONObject(i);
+                    JSONArray countyObject = allCounty.getJSONArray(i);
                     County county = new County();
-                    county.setWeatherId(countyObject.getInt("1"));
-                    county.setCountyName(countyObject.getString("0"));
+                    county.setWeatherId(countyObject.getInt(1));
+                    county.setCountyName(countyObject.getString(0));
                     county.setCityId(cityId);
                     county.save();
                 }

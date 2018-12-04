@@ -29,16 +29,16 @@ public class County extends LitePalSupport {
         this.weatherId = weatherId;
     }
 
-    public int getCityId() {
+    public String getCityId() {
         return cityId;
     }
 
-    public void setCityId(int cityId) {
+    public void setCityId(String cityId) {
         this.cityId = cityId;
     }
 
     private String countyName;
     private int weatherId;
-    private int cityId;
+    private String cityId;
 
 }

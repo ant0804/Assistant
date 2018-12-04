@@ -34,7 +34,7 @@
     <list>
         <mapping class="com.venus.assistant.Weather.Entities.Province" />
         <mapping class="com.venus.assistant.Weather.Entities.City" />
-        <mapping class="com.venus.assistant.Weather.Entities.Country" />
+        <mapping class="com.venus.assistant.Weather.Entities.County" />
     </list>
 
     <!--

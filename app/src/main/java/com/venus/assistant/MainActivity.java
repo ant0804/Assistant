@@ -1,6 +1,7 @@
 package com.venus.assistant;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -40,13 +42,15 @@ public class MainActivity extends AppCompatActivity
 
     final private int REQUEST_INTERNET = 123;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        ActionBar actionBar = getSupportActionBar();
+//        if(actionBar!=null){
+//            actionBar.hide();
+//        }
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -74,9 +78,6 @@ public class MainActivity extends AppCompatActivity
                     new String[]{Manifest.permission.INTERNET},
                     REQUEST_INTERNET);
         } else{
-            //new DownloadTextTask().execute("http://tq.360.cn/api/weatherquery/querys?app=tq360&code=101190201&t=1543033769350&c=1543134959551&_jsonp=renderData&_=1543033769352");
-
-            //sendOkHttpRequest(String.format(getProvinceUrl, Datetime.getTimeStamp()),new );
 
         }
 
@@ -120,8 +121,9 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
+        if (id == R.id.nav_weather) {
+            Intent intent = new Intent(this, WeatherActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {

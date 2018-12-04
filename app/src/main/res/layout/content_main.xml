@@ -5,21 +5,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop ="@dimen/activity_horizontal_margin"
+    android:padding="@dimen/activity_horizontal_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".MainActivity"
     tools:showIn="@layout/app_bar_main">
-<FrameLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
-    <fragment
-        android:id="@+id/choose_area_fragment"
-        android:name="com.venus.assistant.ChooseAreaFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-</FrameLayout>
 
-
+    <TextView
+        android:id="@+id/weather_result"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello World!"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.v4.widget.NestedScrollView>
