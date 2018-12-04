@@ -1,34 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    >
 
-    <data>
-
-        <variable
-            name="view"
-            type="android.view.View" />
-    </data>
-
-    <FrameLayout
+<ScrollView
+    android:id="@+id/weather_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbars="none"
+    android:overScrollMode="never">
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        >
+        <include layout="@layout/weather_title"/>
+        <include layout="@layout/weather_realtime"/>
 
-        <fragment
-            android:id="@+id/choose_area_fragment"
-            android:name="com.venus.assistant.ChooseAreaFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+        <include layout="@layout/weather_aqi"/>
+        <include layout="@layout/weather_suggestion"/>
+        <include layout="@layout/weather_forecast"/>
+    </LinearLayout>
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/fab_margin"
-            app:srcCompat="@drawable/ic_back_home" />
+</ScrollView>
 
-    </FrameLayout>
 
-</layout>
 
+</FrameLayout>
