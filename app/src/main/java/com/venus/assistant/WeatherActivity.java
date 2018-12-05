@@ -39,6 +39,7 @@ public class WeatherActivity extends AppCompatActivity {
     private TextView titleCity;
     private TextView titleUpdateTime;
     private TextView temperatureText;
+    private TextView humidityText;
     private TextView weatherInfoText;
     private LinearLayout forecastLayout;
     private TextView airQuality;
@@ -67,6 +68,7 @@ public class WeatherActivity extends AppCompatActivity {
         titleCity=(TextView)findViewById(R.id.title_city);
         titleUpdateTime=(TextView)findViewById(R.id.title_update_time);
         temperatureText=(TextView)findViewById(R.id.weather_temperature_text);
+        humidityText=(TextView) findViewById(R.id.weather_humidity_text);
         weatherInfoText=(TextView)findViewById(R.id.weather_info_text);
         forecastLayout=(LinearLayout)findViewById(R.id.weather_forecast_layout);
         airQuality=(TextView)findViewById(R.id.air_quality_text);
@@ -195,10 +197,12 @@ public class WeatherActivity extends AppCompatActivity {
         String cityName = weatherInfo.getArea().get(weatherInfo.getArea().size() - 1).get(0);
         String updateTime=weatherInfo.getRealtime().getTime();
         String temperature = weatherInfo.getRealtime().getWeather().getTemperature() + "℃";
+        String humidity = weatherInfo.getRealtime().getWeather().getHumidity() + "%";
         String weatherName=weatherInfo.getRealtime().getWeather().getInfo();
         titleCity.setText(cityName);
         titleUpdateTime.setText(updateTime);
         temperatureText.setText(temperature);
+        humidityText.setText(humidity);
         weatherInfoText.setText(weatherName);
 
         forecastLayout.removeAllViews();
