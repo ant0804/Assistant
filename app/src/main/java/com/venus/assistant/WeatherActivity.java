@@ -226,6 +226,7 @@ public class WeatherActivity extends AppCompatActivity {
             TextView windDirectText = (TextView) view.findViewById(R.id.wind_direct_text);
             TextView windSpeedText = (TextView) view.findViewById(R.id.wind_speed_text);
 
+
             hourText.setText(hourlyForecast.getHour());
             hourInfoText.setText(hourlyForecast.getInfo());
             hourTemperatureText.setText(hourlyForecast.getTemperature() + "℃");
