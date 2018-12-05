@@ -2,78 +2,98 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:layout_margin="15dp"
     android:background="#8000"
-    >
+    android:orientation="vertical">
+
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
+            android:layout_marginTop="3dp"
+            android:background="@drawable/ic_air_quality" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="1dp"
             android:layout_marginTop="15dp"
             android:text="Air Quality"
-            android:textColor="#fff"/>
+            android:textColor="#fff" />
+
         <TextView
             android:id="@+id/air_quality_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="15dp"
-            android:textColor="#fff"/>
+            android:textColor="#fff" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="15dp">
+
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1">
+
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true">
+                android:layout_centerInParent="true"
+                android:orientation="vertical">
+
                 <TextView
                     android:id="@+id/aqi_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-
                     android:textColor="#fff"
-                    android:textSize="40sp"/>
+                    android:textSize="40sp" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="AQI Level"
-                    android:textColor="#fff"/>
+                    android:textColor="#fff" />
             </LinearLayout>
         </RelativeLayout>
+
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1">
-            <TextView
-                android:id="@+id/pm25_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:textSize="40sp"
-                android:textColor="#fff"/>
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="PM2.5 Level"
-                android:textColor="#fff"/>
+                android:layout_centerInParent="true"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/pm25_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textColor="#fff"
+                    android:textSize="40sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="PM2.5 Level"
+                    android:textColor="#fff" />
+            </LinearLayout>
         </RelativeLayout>
     </LinearLayout>
 
