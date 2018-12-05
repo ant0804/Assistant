@@ -10,6 +10,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.venus.assistant.Utilise.Datetime;
+import com.venus.assistant.Weather.Entities.HourlyForecast;
 import com.venus.assistant.Weather.Entities.Weather;
 import com.venus.assistant.Weather.Entities.WeatherInfo;
 import com.venus.assistant.Utilise.HttpUtil;
@@ -46,6 +48,8 @@ public class WeatherActivity extends AppCompatActivity {
     private TextView sportText;
     private TextView clothText;
 
+    private LinearLayout weatherHourForecastLayout;
+
     private ImageView weatherBackgroundContainer;
 
     public SwipeRefreshLayout swipeRefresh;
@@ -71,6 +75,8 @@ public class WeatherActivity extends AppCompatActivity {
         comfortText=(TextView)findViewById(R.id.comfort_text);
         sportText=(TextView)findViewById(R.id.spont_text);
         clothText=(TextView)findViewById(R.id.cloth_text);
+
+        weatherHourForecastLayout = (LinearLayout) findViewById(R.id.weather_hours_forecast_layout);
 
         swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
         swipeRefresh.setColorSchemeResources(R.color.colorPrimary);
@@ -209,6 +215,23 @@ public class WeatherActivity extends AppCompatActivity {
             maxText.setText(weather.getInfo().getNight().get(2) + "℃");
             minText.setText(weather.getInfo().getNight().get(0) + "℃");
             forecastLayout.addView(view);
+
+        }
+
+        for (HourlyForecast hourlyForecast : weatherInfo.getHourlyForecast()) {
+            View view = LayoutInflater.from(this).inflate(R.layout.weather_hour_forecast_item, weatherHourForecastLayout, false);
+            TextView hourText = (TextView) view.findViewById(R.id.hour_text);
+            TextView hourInfoText = (TextView) view.findViewById(R.id.hour_info_text);
+            TextView hourTemperatureText = (TextView) view.findViewById(R.id.hour_temperature_text);
+            TextView windDirectText = (TextView) view.findViewById(R.id.wind_direct_text);
+            TextView windSpeedText = (TextView) view.findViewById(R.id.wind_speed_text);
+
+            hourText.setText(hourlyForecast.getHour());
+            hourInfoText.setText(hourlyForecast.getInfo());
+            hourTemperatureText.setText(hourlyForecast.getTemperature() + "℃");
+            windDirectText.setText(hourlyForecast.getWindDirect());
+            windSpeedText.setText(hourlyForecast.getWindSpeed() + "km/h");
+            weatherHourForecastLayout.addView(view);
 
         }
         airQuality.setText(weatherInfo.getPm25().getQuality());

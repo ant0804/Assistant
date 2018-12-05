@@ -32,6 +32,8 @@
 
                 <include layout="@layout/weather_realtime" />
 
+                <include layout="@layout/weather_hour_forecast" />
+
                 <include layout="@layout/weather_aqi" />
 
                 <include layout="@layout/weather_suggestion" />
