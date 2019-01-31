@@ -2,8 +2,9 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <LinearLayout
+        android:id="@+id/layoutView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_margin="15dp"
         android:background="@drawable/black_background_with_border_radius"
         android:orientation="vertical">
@@ -13,24 +14,18 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="15dp"
-            android:text="Hour Forcast"
+            android:text="Forcast"
             android:textColor="#fff"
             android:textSize="20sp" />
 
-        <HorizontalScrollView
+        <LinearLayout
+            android:id="@+id/weather_daily_forecast_linearlayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="none">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/weather_hours_forecast_linearlayout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"></LinearLayout>
-
-        </HorizontalScrollView>
+        </LinearLayout>
 
     </LinearLayout>
-
 </layout>
 

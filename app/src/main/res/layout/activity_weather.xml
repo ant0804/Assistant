@@ -1,49 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorPrimary">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <ImageView
-        android:id="@+id/weather_background"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop" />
+        android:background="@color/colorPrimary">
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_refresh"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ScrollView
-            android:id="@+id/weather_layout"
+        <ImageView
+            android:id="@+id/weather_background"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:overScrollMode="never"
-            android:scrollbars="none">
+            android:scaleType="centerCrop" />
 
-            <LinearLayout
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ScrollView
+                android:id="@+id/weather_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fitsSystemWindows="true"
-                android:orientation="vertical">
+                android:layout_height="match_parent"
+                android:overScrollMode="never"
+                android:scrollbars="none">
 
-                <include layout="@layout/weather_title" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fitsSystemWindows="true"
+                    android:orientation="vertical">
 
-                <include layout="@layout/weather_realtime" />
+                    <include
+                        android:id="@+id/weatherTitleLayout"
+                        layout="@layout/weather_title" />
 
-                <include layout="@layout/weather_hour_forecast" />
+                    <include
+                        android:id="@+id/weatherRealtimeLayout"
+                        layout="@layout/weather_realtime" />
 
-                <include layout="@layout/weather_aqi" />
+                    <include
+                        android:id="@+id/weatherHourForecastLayout"
+                        layout="@layout/weather_hour_forecast" />
 
-                <include layout="@layout/weather_suggestion" />
+                    <include
+                        android:id="@+id/weatherAqiLayout"
+                        layout="@layout/weather_aqi" />
 
-                <include layout="@layout/weather_forecast" />
-            </LinearLayout>
+                    <include
+                        android:id="@+id/weatherSuggestionLayout"
+                        layout="@layout/weather_suggestion" />
 
-        </ScrollView>
+                    <include
+                        android:id="@+id/weatherForecastLayout"
+                        layout="@layout/weather_daily_forecast" />
+                </LinearLayout>
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+            </ScrollView>
+
+        </android.support.v4.widget.SwipeRefreshLayout>
 
 
-</FrameLayout>
+    </FrameLayout>
+
+</layout>

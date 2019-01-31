@@ -1,78 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="15dp"
-    android:orientation="vertical">
-
-    <TextView
-        android:id="@+id/hour_text"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:background="#fff"
-        android:gravity="center"
-
-        android:padding="1dp"
-        android:textColor="#333"
-        android:textSize="16sp" />
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="2px"
-        android:background="#fff">
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3"
-        android:orientation="horizontal"
-        android:padding="4dp">
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:orientation="vertical">
 
         <TextView
-            android:id="@+id/hour_info_text"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
-            android:gravity="left"
-            android:text="hour_info"
-            android:textColor="#fff" />
+            android:id="@+id/hour_text"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="#fff"
+            android:gravity="center"
 
-        <TextView
-            android:id="@+id/hour_temperature_text"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
-            android:gravity="right"
-            android:textColor="#fff" />
-    </LinearLayout>
+            android:padding="1dp"
+            android:textColor="#333"
+            android:textSize="16sp" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="3"
-        android:orientation="horizontal"
-        android:padding="4dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="2px"
+            android:background="#fff">
 
-        <TextView
-            android:id="@+id/wind_direct_text"
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:orientation="horizontal"
+            android:padding="4dp">
+
+            <TextView
+                android:id="@+id/hour_info_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:text="hour_info"
+                android:textColor="#fff" />
+
+            <TextView
+                android:id="@+id/hour_temperature_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:textColor="#fff" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="left"
-            android:layout_marginRight="10dp"
-            android:textColor="#fff" />
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:orientation="horizontal"
+            android:padding="4dp">
 
-        <TextView
-            android:id="@+id/wind_speed_text"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="right"
+            <TextView
+                android:id="@+id/wind_direct_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="left"
+                android:layout_marginRight="10dp"
+                android:textColor="#fff" />
 
-            android:textColor="#fff" />
+            <TextView
+                android:id="@+id/wind_speed_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="right"
+
+                android:textColor="#fff" />
+        </LinearLayout>
+
+
     </LinearLayout>
 
-
-</LinearLayout>
+</layout>

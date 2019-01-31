@@ -1,7 +1,15 @@
 package com.venus.assistant;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.databinding.DataBindingUtil;
+import android.databinding.ViewDataBinding;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -23,6 +31,7 @@ import com.venus.assistant.Weather.Entities.HourlyForecast;
 import com.venus.assistant.Weather.Entities.Weather;
 import com.venus.assistant.Weather.Entities.WeatherInfo;
 import com.venus.assistant.Utilise.HttpUtil;
+import com.venus.assistant.databinding.ActivityWeatherBinding;
 
 import java.io.IOException;
 
@@ -34,57 +43,32 @@ import static com.venus.assistant.Utilise.Utility.handleWeatherResponse;
 
 public class WeatherActivity extends AppCompatActivity {
 
+    private ActivityWeatherBinding binding;
+    private IntentFilter intentFilter;
+
+    private NetworkChangeReceiver networkChangeReceiver;
+
     private final String weatherUrl="http://tq.360.cn/api/weatherquery/querys?app=tq360&code=%s&t=%s&c=%s&_jsonp=getData&_=%s";
-    private ScrollView weatherLayout;
-    private TextView titleCity;
-    private TextView titleUpdateTime;
-    private TextView temperatureText;
-    private TextView humidityText;
-    private TextView weatherInfoText;
-    private LinearLayout forecastLayout;
-    private TextView airQuality;
-    private TextView aqiText;
-    private TextView pm25Text;
-    private TextView comfortText;
-    private TextView sportText;
-    private TextView clothText;
 
-    private LinearLayout weatherHourForecastLayout;
-
-    private ImageView weatherBackgroundContainer;
-
-    public SwipeRefreshLayout swipeRefresh;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        intentFilter=new IntentFilter();
+        intentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+        networkChangeReceiver=new NetworkChangeReceiver();
+        registerReceiver(networkChangeReceiver,intentFilter);
+
         if (Build.VERSION.SDK_INT >= 21) {
             View decorView = getWindow().getDecorView();
             decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
             getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
-        setContentView(R.layout.activity_weather);
-        weatherBackgroundContainer = (ImageView) findViewById(R.id.weather_background);
-        weatherLayout=(ScrollView)findViewById(R.id.weather_layout);
-        titleCity=(TextView)findViewById(R.id.title_city);
-        titleUpdateTime=(TextView)findViewById(R.id.title_update_time);
-        temperatureText=(TextView)findViewById(R.id.weather_temperature_text);
-        humidityText=(TextView) findViewById(R.id.weather_humidity_text);
-        weatherInfoText=(TextView)findViewById(R.id.weather_info_text);
-        forecastLayout=(LinearLayout)findViewById(R.id.weather_forecast_layout);
-        airQuality=(TextView)findViewById(R.id.air_quality_text);
-        aqiText=(TextView)findViewById(R.id.aqi_text);
-        pm25Text=(TextView)findViewById(R.id.pm25_text);
-        comfortText=(TextView)findViewById(R.id.comfort_text);
-        sportText=(TextView)findViewById(R.id.spont_text);
-        clothText=(TextView)findViewById(R.id.cloth_text);
+        // setContentView(R.layout.activity_weather);
 
-        weatherHourForecastLayout = (LinearLayout) findViewById(R.id.weather_hours_forecast_layout);
-
-        swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
-        swipeRefresh.setColorSchemeResources(R.color.colorPrimary);
-
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_weather);
+        binding.swipeRefresh.setColorSchemeResources(R.color.colorPrimary);
         SharedPreferences prefs=PreferenceManager.getDefaultSharedPreferences(this);
-
         String weatherString=prefs.getString("weather",null);
 
         final String weatherId;
@@ -99,10 +83,10 @@ public class WeatherActivity extends AppCompatActivity {
 //            requestWeather(weatherId);
 //        }
         weatherId = getIntent().getStringExtra("weather_id");
-        weatherLayout.setVisibility(View.INVISIBLE);
+        binding.weatherLayout.setVisibility(View.INVISIBLE);
         requestWeather(weatherId);
 
-        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        binding.swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 requestWeather(weatherId);
@@ -111,7 +95,7 @@ public class WeatherActivity extends AppCompatActivity {
 
         String weatherBackground = prefs.getString("weatherBackground", null);
         if (weatherBackground != null) {
-            Glide.with(this).load(weatherBackground).into(weatherBackgroundContainer);
+            Glide.with(this).load(weatherBackground).into(binding.weatherBackground);
         } else {
             loadWeatherBackground();
         }
@@ -143,7 +127,7 @@ public class WeatherActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Glide.with(WeatherActivity.this).load(bingPicUrl).into(weatherBackgroundContainer);
+                        Glide.with(WeatherActivity.this).load(bingPicUrl).into(binding.weatherBackground);
 
                     }
                 });
@@ -162,7 +146,7 @@ public class WeatherActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         Toast.makeText(WeatherActivity.this,"Get Weather Data Failed!",Toast.LENGTH_SHORT).show();
-                        swipeRefresh.setRefreshing(false);
+                        binding.swipeRefresh.setRefreshing(false);
                     }
                 });
             }
@@ -184,7 +168,7 @@ public class WeatherActivity extends AppCompatActivity {
                         }else{
                             Toast.makeText(WeatherActivity.this,"Get Weather Data Failed!",Toast.LENGTH_SHORT).show();
                         }
-                        swipeRefresh.setRefreshing(false);
+                        binding.swipeRefresh.setRefreshing(false);
                     }
                 });
             }
@@ -199,55 +183,77 @@ public class WeatherActivity extends AppCompatActivity {
         String temperature = weatherInfo.getRealtime().getWeather().getTemperature() + "℃";
         String humidity = weatherInfo.getRealtime().getWeather().getHumidity() + "%";
         String weatherName=weatherInfo.getRealtime().getWeather().getInfo();
-        titleCity.setText(cityName);
-        titleUpdateTime.setText(updateTime);
-        temperatureText.setText(temperature);
-        humidityText.setText(humidity);
-        weatherInfoText.setText(weatherName);
+        binding.weatherTitleLayout.titleCity.setText(cityName);
+        binding.weatherTitleLayout.titleUpdateTime.setText(updateTime);
+        binding.weatherRealtimeLayout.weatherTemperatureText.setText(temperature);
+        binding.weatherRealtimeLayout.weatherHumidityText.setText(humidity);
+        binding.weatherRealtimeLayout.weatherInfoText.setText(weatherName);
 
-        forecastLayout.removeAllViews();
+        //dailyForecastLayout.removeAllViews();
+        binding.weatherForecastLayout.weatherDailyForecastLinearlayout.removeAllViews();
 
         for(Weather weather:weatherInfo.getWeather()){
-            View view=LayoutInflater.from(this).inflate(R.layout.weather_forecast_item,forecastLayout,false);
+            View view=LayoutInflater.from(this).inflate(R.layout.weather_forecast_item, binding.weatherForecastLayout.weatherDailyForecastLinearlayout,false);
             TextView dateText=(TextView) view.findViewById(R.id.date_text);
             TextView infoText=(TextView) view.findViewById(R.id.info_text);
             TextView maxText=(TextView) view.findViewById(R.id.max_text);
             TextView minText=(TextView) view.findViewById(R.id.min_text);
 
+
             dateText.setText(weather.getDate());
             infoText.setText(weather.getInfo().getNight().get(1));
             maxText.setText(weather.getInfo().getNight().get(2) + "℃");
             minText.setText(weather.getInfo().getNight().get(0) + "℃");
-            forecastLayout.addView(view);
-
+            //dailyForecastLayout.addView(view);
+            binding.weatherForecastLayout.weatherDailyForecastLinearlayout.addView(view);
         }
-
+        //weatherHourForecastLayout.removeAllViews();
+        binding.weatherHourForecastLayout.weatherHoursForecastLinearlayout.removeAllViews();
         for (HourlyForecast hourlyForecast : weatherInfo.getHourlyForecast()) {
-            View view = LayoutInflater.from(this).inflate(R.layout.weather_hour_forecast_item, weatherHourForecastLayout, false);
+            //View view = LayoutInflater.from(this).inflate(R.layout.weather_hour_forecast_item, weatherHourForecastLayout, false);
+            View view = LayoutInflater.from(this).inflate(R.layout.weather_hour_forecast_item, binding.weatherHourForecastLayout.weatherHoursForecastLinearlayout, false);
             TextView hourText = (TextView) view.findViewById(R.id.hour_text);
             TextView hourInfoText = (TextView) view.findViewById(R.id.hour_info_text);
             TextView hourTemperatureText = (TextView) view.findViewById(R.id.hour_temperature_text);
             TextView windDirectText = (TextView) view.findViewById(R.id.wind_direct_text);
             TextView windSpeedText = (TextView) view.findViewById(R.id.wind_speed_text);
 
-
             hourText.setText(hourlyForecast.getHour());
             hourInfoText.setText(hourlyForecast.getInfo());
             hourTemperatureText.setText(hourlyForecast.getTemperature() + "℃");
             windDirectText.setText(hourlyForecast.getWindDirect());
             windSpeedText.setText(hourlyForecast.getWindSpeed() + "km/h");
-            weatherHourForecastLayout.addView(view);
+            //weatherHourForecastLayout.addView(view);
+            binding.weatherHourForecastLayout.weatherHoursForecastLinearlayout.addView(view);
 
         }
-        airQuality.setText(weatherInfo.getPm25().getQuality());
-        aqiText.setText(weatherInfo.getPm25().getAqi()+"");
-        pm25Text.setText(weatherInfo.getPm25().getPm25()+"");
 
-        comfortText.setText(weatherInfo.getLife().getInfo().getKongtiao().get(1));
-        sportText.setText(weatherInfo.getLife().getInfo().getYundong().get(1));
-        clothText.setText(weatherInfo.getLife().getInfo().getChuanyi().get(1));
+        binding.weatherAqiLayout.airQualityText.setText(weatherInfo.getPm25().getQuality());
+        binding.weatherAqiLayout.aqiText.setText(weatherInfo.getPm25().getAqi()+"");
+        binding.weatherAqiLayout.pm25Text.setText(weatherInfo.getPm25().getPm25()+"");
 
-        weatherLayout.setVisibility(View.VISIBLE);
+        binding.weatherSuggestionLayout.comfortText.setText(weatherInfo.getLife().getInfo().getKongtiao().get(1));
+        binding.weatherSuggestionLayout.spontText.setText(weatherInfo.getLife().getInfo().getYundong().get(1));
+        binding.weatherSuggestionLayout.clothText.setText(weatherInfo.getLife().getInfo().getChuanyi().get(1));
 
+        binding.weatherLayout.setVisibility(View.VISIBLE);
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(networkChangeReceiver);
+    }
+
+    class NetworkChangeReceiver extends BroadcastReceiver{
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            ConnectivityManager connectivityManager=(ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo=connectivityManager.getActiveNetworkInfo();
+
+            Toast.makeText(context,"network changes",Toast.LENGTH_SHORT).show();
+        }
     }
 }

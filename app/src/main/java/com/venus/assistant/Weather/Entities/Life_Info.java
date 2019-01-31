@@ -3,9 +3,11 @@ package com.venus.assistant.Weather.Entities;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Life_Info {
+public class Life_Info implements Serializable {
+
     @SerializedName("kongtiao")
     @Expose
     private List<String> kongtiao = null;
